@@ -9,9 +9,16 @@ core <-function(in_data){
 
     out_data=list(
         peek=F,index=current+1,
-        sum=in_data$sum,plusOne=F
+        sum=in_data$sum,plusOne=F,
+        lengthOfWell=1,count_less5=in_data$count_less5,
+        isPreviousWell=F
         );
-
+    if(!is.null(in_data$isPreviousWell)){
+        out_data$isPreviousWell = in_data$isPreviousWell;
+    }
+    if(!is.null(in_data$lengthOfWell)){
+        out_data$lengthOfWell = in_data$lengthOfWell;
+    }
     if(data<0.05){
         out_data$peek=F;
     }else{
@@ -19,6 +26,9 @@ core <-function(in_data){
     }
     if(is.null(out_data$sum)){
         out_data$sum = 0;
+    }
+    if(is.null(out_data$count_less5)){
+        out_data$count_less5 = 1;
     }
     if(isPreviousPeek == out_data$peek && isPreviousPeek){
         out_data$sum=out_data$sum + data;
@@ -29,13 +39,39 @@ core <-function(in_data){
         }
         out_data$sum = 0;
     }
+
+    isCurrentWell = !out_data$peek;
+    #browser();
+
+    if(out_data$isPreviousWell && isCurrentWell){
+        printf("index1:%d,%d\n",out_data$index-1,out_data$lengthOfWell);
+        out_data$lengthOfWell = out_data$lengthOfWell +1;
+    }
+
+    if(out_data$isPreviousWell && !isCurrentWell){
+        printf("index:%d,%d\n",out_data$index-1,out_data$lengthOfWell);
+        if(out_data$lengthOfWell > 5){
+
+            text(out_data$lengthOfWell,
+                x=(out_data$index-out_data$lengthOfWell/2),y=0.05,
+                col=3);
+            out_data$count_less5 = 1;
+        }else{
+            # printf("%d\n",out_data$lengthOfWell);
+            text(out_data$lengthOfWell,x=(out_data$index-1),
+            y=-1+(out_data$count_less5%%5)/10,col=1);
+            out_data$count_less5 = out_data$count_less5 +1;
+        }
+        out_data$lengthOfWell =1;
+    }
+    out_data$isPreviousWell = isCurrentWell;
     out_data;
 }
 
 
 count_skiping <- function(dataid){
     d=loadData(dataid);
-    da=d$a[1:2000]^.5 -1;
+    da=d$a[1:3000]^.5 -1;
     plot(da,type="l");
     abline(h=0.05,col=1);
     len = length(da);
@@ -44,15 +80,19 @@ count_skiping <- function(dataid){
     coreResult=list(index=1,data=NULL);
     i = 1;
     t=logical();
+    isPreviousWell =F;# the previous data is in a well.
+    lengthOfWell = 1;
+    count_less5 = 1;
     while(i <= len){
         coreResult$data=da[i];
         i = i +1;
         coreResult = core(coreResult);
-        t[length(t)+1]= !coreResult$peek;
+        isCurrentWell = !coreResult$peek;
+        t[length(t)+1]= isCurrentWell;
         if(coreResult$plusOne){
-            printf("index:%d\n",coreResult$index-1);
             points(coreResult$index-1, 1,col=2);
         }
+        isPreviousWell = isCurrentWell;
     }
-    lines(-t,type="h",col=2);
+    #lines(-t,type="h",col=2);
 }
