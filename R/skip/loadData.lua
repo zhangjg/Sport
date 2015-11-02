@@ -1,5 +1,5 @@
 --local count_skpe=require "count_skip";
-require "count_skip";
+require "count_skip2";
 
 function loadData(filename)
     local input=io.open("data/shaft_"..filename..".log","r");
@@ -16,4 +16,4 @@ function loadData(filename)
     print("count:",count);
     input:close();
 end
-loadData('li20');
+loadData('li40');
