@@ -78,8 +78,8 @@ core <-function(in_data,threshold=0.2,threshold_eng=16,plot=F){
 }
 
 
-count_skiping <- function(dataid,begin=1,end=NULL,threshold=0.2,threshold_eng=16){
-    d=loadData(dataid);
+count_skiping <- function(begin=1,end=NULL,threshold=0.2,threshold_eng=16){
+    d=loadData();
     filter=NULL;
     if(is.null(end)){
         end=length(d$a);
