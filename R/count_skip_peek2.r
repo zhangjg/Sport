@@ -37,7 +37,7 @@ core <-function(in_data,threshold=0.2,threshold_eng=16,plot=F){
     #isCurrentWell = !out_data$peek;
     #browser();
     if(!out_data$peek && plot){
-        lines(x=out_data$index-1,-1,col=2,type="h");
+        # lines(x=out_data$index-1,-1,col=2,type="h");
     }
     #if(out_data$isPreviousWell && isCurrentWell){
     # !isPreviousPeek equal isPreviousWell
@@ -46,7 +46,7 @@ core <-function(in_data,threshold=0.2,threshold_eng=16,plot=F){
     if(!(isPreviousPeek ||out_data$peek)){
         #printf("index1:%d,%d\n",out_data$index-1,out_data$lengthOfWell);
         out_data$lengthOfWell = out_data$lengthOfWell +1;
-        if( out_data$lengthOfWell >= 5 ){
+        if( out_data$lengthOfWell >= 3 ){
             if(out_data$sum >= threshold_eng) {
                 out_data$plusOne = T;
             }
@@ -57,7 +57,7 @@ core <-function(in_data,threshold=0.2,threshold_eng=16,plot=F){
     # !isPreviousPeek equal isPreviousWell
     # !out_data$peek equal isCurrentWell
     if(!isPreviousPeek && out_data$peek){
-        if(out_data$lengthOfWell > 5){
+        if(out_data$lengthOfWell > 3 && plot){
             text(out_data$lengthOfWell,
                 x=(out_data$index-out_data$lengthOfWell/2),y=0.05,
                 col=3);
@@ -78,8 +78,8 @@ core <-function(in_data,threshold=0.2,threshold_eng=16,plot=F){
 }
 
 
-count_skiping <- function(begin=1,end=NULL,threshold=0.2,threshold_eng=16){
-    d=loadData();
+count_skiping <- function(name="bluetoothdata.txt",begin=1,end=NULL,threshold=0.2,threshold_eng=16){
+    d=loadData(name);
     filter=NULL;
     if(is.null(end)){
         end=length(d$a);
@@ -101,7 +101,7 @@ count_skiping <- function(begin=1,end=NULL,threshold=0.2,threshold_eng=16){
     while(i <= len){
         coreResult$data=da[i];
         i = i +1;
-        coreResult = core(coreResult,threshold,threshold_eng,plot=F);
+        coreResult = core(coreResult,threshold,threshold_eng,plot=T);
         isCurrentWell = !coreResult$peek;
         t[length(t)+1]= isCurrentWell;
         if(coreResult$plusOne){

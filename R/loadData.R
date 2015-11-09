@@ -1,6 +1,6 @@
 
-loadData <- function(){
-    data2<- read.table("bluetoothdata2.txt",col.name=c("ax","ay","az"),sep=",");
+loadData <- function(name){
+    data2<- read.table(name,col.name=c("ax","ay","az","t"),sep=",");
     #browser();
     ax=data2$ax;
     ay=data2$ay;
