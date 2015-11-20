@@ -1,13 +1,13 @@
 
 loadData <- function(name){
-    data<-read.table(paste("data/element_",name,".log",sep=""),col.names=c("t","q0","q1","q2","q3"));
+    data<-read.table(paste("11-12/element_",name,".txt",sep=""),col.names=c("t","q0","q1","q2","q3"));
     q0=data$q0/2^30;
     q1=data$q1/2^30;
     q2=data$q2/2^30;
     q3=data$q3/2^30;
 
     data$t <- NULL;
-    data2<- read.table(paste("data/shaft_",name,".log",sep=""),col.name=c("t","ax","ay","az","gx","gy","gz"));
+    data2<- read.table(paste("11-12/shaft_",name,".txt",sep=""),col.name=c("t","ax","ay","az","gx","gy","gz"));
     ax=data2$ax;
     ay=data2$ay;
     az=data2$az;
